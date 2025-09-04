@@ -12,24 +12,28 @@
                             <th scope="col">Action</th>
                         </tr>
                         </thead>
-                @foreach($tasks as $task)
-                            <tbody>
+                        <tbody>
+                        @foreach($tasks as $task)
                             <tr wire:key="{{$task->id}}">
                                 <th scope="row">{{$task->id}}</th>
                                 <td>{{$task->title}}</td>
                                 <td>{{$task->description}}</td>
                                 <td>
-                                <x-secondary-button>
-                                    <a href={{route('show.update-task', $task->id)}}>Edit</a>
-                                </x-secondary-button>
+                               <div>
+                                   <x-secondary-button>
+                                       <a href={{route('show.update-task', $task->id)}}>Edit</a>
+                                   </x-secondary-button>
+                               </div>
                                 </td>
                                 <td>
-                                    @livewire('modals.some-modal', ['task' => $task->id])
+                                    <x-secondary-button wire:click="$dispatch('openModal', { component: 'task.delete', arguments: { task: {{$task->id}} }})">
+                                            Delete
+                                    </x-secondary-button>
                                 </td>
                             </tr>
-                            </tbody>
                         @endforeach
-                        </table>
+                        </tbody>
+                    </table>
 
                 </div>
             </div>

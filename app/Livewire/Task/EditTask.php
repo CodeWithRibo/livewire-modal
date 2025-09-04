@@ -1,17 +1,33 @@
 <?php
 namespace App\Livewire\Task;
 
+use AllowDynamicProperties;
 use App\Models\Task;
 use Illuminate\View\View;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-class EditTask extends Component
+#[AllowDynamicProperties] class EditTask extends Component
 {
-    #[Title('Edit Task')]
+    public $status;
+    public $tasks;
+    public $listeners = ['taskDeleted' => 'removeTask'];
+
+    public function mount(): void
+    {
+        $this->tasks = Task::orderBy('created_at', 'ASC')->get();
+    }
+
+    #[On('taskDeleted')]
+    public function removeTask($id): void
+    {
+        $this->tasks = $this->tasks->reject(fn ($task) => $task->id === (int) $id);
+    }
+
     public function render() : View
     {
-        $tasks = Task::orderBy('created_at', 'ASC')->paginate(10);
-        return view('livewire.task.edit-task', compact('tasks'));
+        return view('livewire.task.edit-task',[
+            'tasks' => $this->tasks]);
     }
 }
