@@ -11,21 +11,10 @@
                     <x-text-input wire:model.live="description" placeholder="Description"></x-text-input>
                     <div>@error('description') {{ $message }} @enderror</div>
                 </div>
-                <x-primary-button>Submit</x-primary-button>
+                <x-primary-button
+                    wire:target="saveTask"
+                    wire:loading.attr="disabled">Submit</x-primary-button>
             </form>
-            <button wire:click="$dispatch('closeModal')" class="text-red-500 font-bold">Close</button>
         </div>
     </div>
-
-    @script
-    <script>
-        $wire.on('closingModalOnEscape', data => {
-            data.closing = false;
-        });
-        $wire.on('closingModalOnClickAway', data => {
-                data.closing = false;
-        });
-    </script>
-    @endscript
-
 </div>
