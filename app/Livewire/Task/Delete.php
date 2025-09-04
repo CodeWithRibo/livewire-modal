@@ -17,6 +17,7 @@ class Delete extends ModalComponent
     {
         $this->task->delete();
         $this->closeModal();
+        $this->dispatch('taskDeleted', ['id' => $this->task->id] );
     }
 
     public function render()
