@@ -1,4 +1,4 @@
-<div>
+<div class="p-6 sm:p-10">
     <form wire:submit="updateTask()">
         <div class="pb-5">
             <x-text-input wire:model.live="title" placeholder="Title"></x-text-input>

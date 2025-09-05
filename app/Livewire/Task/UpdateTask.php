@@ -2,9 +2,9 @@
 
 namespace App\Livewire\Task;
 
-use Livewire\Component;
+use LivewireUI\Modal\ModalComponent;
 
-class UpdateTask extends Component
+class UpdateTask extends ModalComponent
 {
     public $userTask;
     public $title;
@@ -18,15 +18,27 @@ class UpdateTask extends Component
         $this->description = $taskId->description;
     }
 
+    protected function rules(): array
+    {
+        return [
+            'title' => 'required|min:3',
+            'description' => 'required|min:10',
+        ];
+    }
+
+    public function updated($property)
+    {
+        return $this->validateOnly($property);
+    }
+
     public function updateTask(): void
     {
         $taskId = \App\Models\Task::findOrFail($this->userTask);
-        $taskId->update([
-            'title' => $this->title,
-            'description' => $this->description
-        ]);
+        $taskId->update($this->validate());
 
-        $this->redirect('/dashboard', navigate: true);
+        $this->dispatch('taskUpdated', id : $this->userTask);
+        $this->closeModal();
+
     }
 
     public function render()

@@ -19,22 +19,19 @@
                                 <td>{{$task->title}}</td>
                                 <td>{{$task->description}}</td>
                                 <td>
-                               <div>
-                                   <x-secondary-button>
-                                       <a href={{route('show.update-task', $task->id)}}>Edit</a>
-                                   </x-secondary-button>
-                               </div>
+                                    <x-secondary-button wire:click="$dispatch('openModal', { component: 'task.update-task', arguments: { id: {{$task->id}} }})">
+                                        Edit
+                                    </x-secondary-button>
                                 </td>
                                 <td>
                                     <x-secondary-button wire:click="$dispatch('openModal', { component: 'task.delete', arguments: { task: {{$task->id}} }})">
-                                            Delete
+                                        Delete
                                     </x-secondary-button>
                                 </td>
                             </tr>
                         @endforeach
                         </tbody>
                     </table>
-
                 </div>
             </div>
         </div>

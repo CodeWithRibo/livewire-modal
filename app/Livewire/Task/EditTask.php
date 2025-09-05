@@ -12,17 +12,27 @@ use Livewire\Component;
 {
     public $status;
     public $tasks;
-    public $listeners = ['taskDeleted' => 'removeTask'];
+    public $listeners = [
+        'taskDeleted' => 'removeTask',
+        'taskUpdated' => 'refreshTask'
+    ];
 
     public function mount(): void
     {
         $this->tasks = Task::orderBy('created_at', 'ASC')->get();
     }
 
-    #[On('taskDeleted')]
     public function removeTask($id): void
     {
         $this->tasks = $this->tasks->reject(fn ($task) => $task->id === (int) $id);
+    }
+
+    public function refreshTask($id): void
+    {
+        $updatedTask = Task::findOrFail($id);
+        $this->tasks = $this->tasks->map(function ($t) use ($updatedTask) {
+            return $t->id === (int) $updatedTask->id ? $updatedTask : $t;
+        });
     }
 
     public function render() : View
