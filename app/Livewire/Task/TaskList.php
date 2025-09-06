@@ -2,14 +2,18 @@
 
 namespace App\Livewire\Task;
 
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 use function Livewire\of;
 
 class TaskList extends Component
 {
-
     use WithPagination;
+
+    #[Url]
+    public ?string $search = '';
+
     public $sortField = 'title';
     public $sortDirection = 'ASC';
     public $statusFilter = 'all';
@@ -17,10 +21,9 @@ class TaskList extends Component
     public function sortBy($field): string
     {
         return $this->sortField === $field
-            ? $this->sortDirection = $this->sortDirection === 'ASC'  ? 'DESC' : 'ASC'
+            ? $this->sortDirection = $this->sortDirection === 'ASC' ? 'DESC' : 'ASC'
             : $this->sortField = $field;
     }
-
 
     public function render()
     {
@@ -29,7 +32,8 @@ class TaskList extends Component
         if ($this->statusFilter != 'all')
             $q->where('status', $this->statusFilter);
 
-        $tasks = $q->orderBy($this->sortField, $this->sortDirection)->paginate(10);
+        $tasks = $q->search($this->search)
+            ->filtered($this->sortField, $this->sortDirection)->latest()->get();
         return view('livewire.task.task-list', compact('tasks'));
     }
 }
