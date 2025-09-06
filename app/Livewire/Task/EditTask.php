@@ -4,18 +4,28 @@ namespace App\Livewire\Task;
 use AllowDynamicProperties;
 use App\Models\Task;
 use Illuminate\View\View;
+use JetBrains\PhpStorm\NoReturn;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
 #[AllowDynamicProperties] class EditTask extends Component
 {
-    public $status;
-    public $tasks;
     public $listeners = [
         'taskDeleted' => 'removeTask',
         'taskUpdated' => 'refreshTask'
     ];
+    public $tasks;
+
+    public $sortField = 'title';
+    public $sortDirection = 'ASC';
+
+    public function sortBy($field): string
+    {
+        return $this->sortField === $field
+            ? $this->sortDirection = $this->sortDirection === 'ASC'  ? 'DESC' : 'ASC'
+            : $this->sortField = $field;
+    }
 
     public function mount(): void
     {
@@ -35,9 +45,9 @@ use Livewire\Component;
         });
     }
 
-    public function render() : View
+    public function render()
     {
-        return view('livewire.task.edit-task',[
-            'tasks' => $this->tasks]);
+        $tasksList = Task::orderBy($this->sortField, $this->sortDirection)->paginate(10);
+        return view('livewire.task.edit-task', compact('tasksList'));
     }
 }

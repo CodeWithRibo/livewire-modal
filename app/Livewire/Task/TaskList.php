@@ -5,7 +5,7 @@ namespace App\Livewire\Task;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
-use function Livewire\of;
+use function Pest\Laravel\json;
 
 class TaskList extends Component
 {
@@ -33,7 +33,7 @@ class TaskList extends Component
             $q->where('status', $this->statusFilter);
 
         $tasks = $q->search($this->search)
-            ->filtered($this->sortField, $this->sortDirection)->latest()->get();
+            ->filtered($this->sortField, $this->sortDirection)->simplePaginate(15);
         return view('livewire.task.task-list', compact('tasks'));
     }
 }

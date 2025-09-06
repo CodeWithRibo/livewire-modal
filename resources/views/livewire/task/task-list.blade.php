@@ -1,4 +1,6 @@
 <div>
+    <input wire:model.live.debounce.250ms="search" type="search" placeholder="Search task by title...">
+
     <select wire:model.live.debounce.250ms="statusFilter">
         <option value="all">All</option>
         <option value="pending">Pending</option>
@@ -45,5 +47,4 @@
         @endforeach
         </tbody>
     </table>
-    {{ $tasks->links() }}
 </div>

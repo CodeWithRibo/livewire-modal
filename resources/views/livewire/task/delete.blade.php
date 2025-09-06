@@ -1,6 +1,5 @@
 <div class="p-6 sm:p-10">
     <form wire:submit.prevent="delete" class="space-y-6">
-        <!-- Header with Icon -->
         <div class="flex flex-col items-center text-center space-y-3">
             <div class="flex items-center justify-center w-16 h-16 rounded-full bg-red-100 text-red-600">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
